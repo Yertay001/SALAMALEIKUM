@@ -33,7 +33,7 @@ class Profile(models.Model):
     def _str__(self):
         return f"{self.customer} - {self.gender} - {self.birth_date}"
     
-class Adresses(models.Model):
+class Address(models.Model):
     profile = models.ForeignKey(Profile, on_delete=Profile)
     city = models.CharField(max_length=150)
     district = models.CharField(max_length=150)
