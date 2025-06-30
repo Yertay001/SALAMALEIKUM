@@ -5,7 +5,7 @@ class Customer(AbstractUser):
     username = models.CharField(max_length=150, blank=True, null=True)
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
-    email = models.CharField(max_length=150, unique=True)
+    email = models.EmailField(unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
 
@@ -23,7 +23,7 @@ class Profile(models.Model):
     ]
         
     image = models.ImageField(upload_to='profile_images')
-    customer = models.OneToOneField(Customer, on_delete=Customer)
+    customer = models.OneToOneField(Customer, on_delete=models.CASCADE)
     birth_date = models.DateField()
     gender = models.CharField(max_length=20, choices=GENDER)
 
@@ -34,7 +34,7 @@ class Profile(models.Model):
         return f"{self.customer} - {self.gender} - {self.birth_date}"
     
 class Address(models.Model):
-    profile = models.ForeignKey(Profile, on_delete=Profile)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     city = models.CharField(max_length=150)
     district = models.CharField(max_length=150)
     adress_line_1 = models.CharField(max_length=150)

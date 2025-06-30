@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Code - ShopBay</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .auth-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #5B3FE2, #764ba2);
+        }
+
+        .verification-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #5B3FE2, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+        }
+
+        .verification-icon svg {
+            width: 40px;
+            height: 40px;
+            stroke: white;
+            stroke-width: 2;
+        }
+
+        .logo {
+            margin-bottom: 1.5rem;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #5B3FE2;
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-header {
+            margin-bottom: 2rem;
+        }
+
+        .auth-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 0.75rem;
+        }
+
+        .auth-subtitle {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 0.5rem;
+        }
+
+        .email-display {
+            color: #5B3FE2;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .code-input-container {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .code-input {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #e5e5e5;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: 600;
+            background: #fafafa;
+            transition: all 0.3s ease;
+        }
+
+        .code-input:focus {
+            outline: none;
+            border-color: #5B3FE2;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(91, 63, 226, 0.1);
+        }
+
+        .code-input.filled {
+            border-color: #28a745;
+            background: #f8fff9;
+        }
+
+        .code-input.error {
+            border-color: #dc3545;
+            background: #fff8f8;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .timer-container {
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .timer {
+            font-weight: 600;
+            color: #5B3FE2;
+        }
+
+        .timer.expired {
+            color: #dc3545;
+        }
+
+        .resend-container {
+            margin: 1.5rem 0;
+        }
+
+        .resend-btn {
+            background: none;
+            border: none;
+            color: #5B3FE2;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .resend-btn:hover {
+            color: #4a32d1;
+        }
+
+        .resend-btn:disabled {
+            color: #999;
+            cursor: not-allowed;
+            text-decoration: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #5B3FE2, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(91, 63, 226, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .auth-footer {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .auth-footer a {
+            color: #5B3FE2;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #dc3545;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            border: 1px solid #fecaca;
+        }
+
+        .success-message {
+            background: #f0f9ff;
+            color: #0369a1;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            border: 1px solid #bae6fd;
+        }
+
+        .help-text {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            font-size: 0.85rem;
+            color: #6c757d;
+            text-align: left;
+        }
+
+        .help-text h4 {
+            color: #495057;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .help-text ul {
+            margin: 0.5rem 0;
+            padding-left: 1.25rem;
+        }
+
+        .help-text li {
+            margin-bottom: 0.25rem;
+        }
+
+        @media (max-width: 480px) {
+            .auth-container {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+
+            .code-input-container {
+                gap: 0.5rem;
+            }
+
+            .code-input {
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Success animation */
+        .success-animation {
+            animation: successPulse 0.6s ease-in-out;
+        }
+
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="verification-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+        </div>
+
+        <div class="logo">
+            <h1>ShopBay</h1>
+        </div>
+
+        <div class="auth-header">
+            <h2 class="auth-title">Verify Your Email</h2>
+            <p class="auth-subtitle">
+                We've sent a 6-digit verification code to<br>
+                <span class="email-display" id="userEmail">your.email@example.com</span>
+            </p>
+        </div>
+
+        <div id="errorMessage" class="error-message" style="display: none;"></div>
+        <div id="successMessage" class="success-message" style="display: none;"></div>
+
+        <form id="verifyForm">
+            <div class="code-input-container">
+                <input type="text" class="code-input" maxlength="1" id="code1" autocomplete="off">
+                <input type="text" class="code-input" maxlength="1" id="code2" autocomplete="off">
+                <input type="text" class="code-input" maxlength="1" id="code3" autocomplete="off">
+                <input type="text" class="code-input" maxlength="1" id="code4" autocomplete="off">
+                <input type="text" class="code-input" maxlength="1" id="code5" autocomplete="off">
+                <input type="text" class="code-input" maxlength="1" id="code6" autocomplete="off">
+            </div>
+
+            <div class="timer-container">
+                <span>Code expires in </span>
+                <span class="timer" id="timer">05:00</span>
+            </div>
+
+            <div class="resend-container">
+                <span>Didn't receive the code? </span>
+                <button type="button" class="resend-btn" id="resendBtn" onclick="resendCode()">
+                    Resend Code
+                </button>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn" disabled>
+                Verify Email
+            </button>
+        </form>
+
+        <div class="help-text">
+            <h4>Having trouble?</h4>
+            <ul>
+                <li>Check your spam/junk folder</li>
+                <li>Make sure you entered the correct email address</li>
+                <li>Wait a few minutes for the email to arrive</li>
+                <li>Contact support if you continue having issues</li>
+            </ul>
+        </div>
+
+        <div class="auth-footer">
+            Wrong email? <a href="register.html">Change Email Address</a>
+        </div>
+    </div>
+
+    <script>
+        // Application state
+        let timeLeft = 300; // 5 minutes in seconds
+        let timerInterval;
+        let resendCooldown = 0;
+        let resendInterval;
+        const correctCode = '123456'; // Demo code
+
+        // DOM elements
+        const codeInputs = document.querySelectorAll('.code-input');
+        const submitBtn = document.getElementById('submitBtn');
+        const resendBtn = document.getElementById('resendBtn');
+        const timerEl = document.getElementById('timer');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const userEmailEl = document.getElementById('userEmail');
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setupCodeInputs();
+            startTimer();
+            loadUserEmail();
+        });
+
+        function loadUserEmail() {
+            // Try to get email from localStorage or URL params
+            const urlParams = new URLSearchParams(window.location.search);
+            const email = urlParams.get('email') || localStorage.getItem('userEmail') || 'demo@shopbay.com';
+            userEmailEl.textContent = email;
+        }
+
+        function setupCodeInputs() {
+            codeInputs.forEach((input, index) => {
+                input.addEventListener('input', function(e) {
+                    const value = e.target.value;
+                    
+                    // Only allow numbers
+                    if (!/^\d*$/.test(value)) {
+                        e.target.value = '';
+                        return;
+                    }
+
+                    // Move to next input
+                    if (value && index < codeInputs.length - 1) {
+                        codeInputs[index + 1].focus();
+                    }
+
+                    // Update input state
+                    if (value) {
+                        input.classList.add('filled');
+                        input.classList.remove('error');
+                    } else {
+                        input.classList.remove('filled', 'error');
+                    }
+
+                    checkCodeComplete();
+                });
+
+                input.addEventListener('keydown', function(e) {
+                    // Handle backspace
+                    if (e.key === 'Backspace' && !input.value && index > 0) {
+                        codeInputs[index - 1].focus();
+                        codeInputs[index - 1].value = '';
+                        codeInputs[index - 1].classList.remove('filled', 'error');
+                        checkCodeComplete();
+                    }
+
+                    // Handle paste
+                    if (e.key === 'v' && (e.ctrlKey || e.metaKey)) {
+                        e.preventDefault();
+                        navigator.clipboard.readText().then(text => {
+                            const digits = text.replace(/\D/g, '').slice(0, 6);
+                            fillCode(digits);
+                        });
+                    }
+                });
+
+                input.addEventListener('focus', function() {
+                    input.select();
+                });
+            });
+        }
+
+        function fillCode(code) {
+            codeInputs.forEach((input, index) => {
+                if (index < code.length) {
+                    input.value = code[index];
+                    input.classList.add('filled');
+                    input.classList.remove('error');
+                } else {
+                    input.value = '';
+                    input.classList.remove('filled', 'error');
+                }
+            });
+            checkCodeComplete();
+        }
+
+        function checkCodeComplete() {
+            const code = getEnteredCode();
+            submitBtn.disabled = code.length !== 6;
+        }
+
+        function getEnteredCode() {
+            return Array.from(codeInputs).map(input => input.value).join('');
+        }
+
+        function clearCode() {
+            codeInputs.forEach(input => {
+                input.value = '';
+                input.classList.remove('filled', 'error');
+            });
+            submitBtn.disabled = true;
+        }
+
+        function showError() {
+            codeInputs.forEach(input => {
+                input.classList.add('error');
+            });
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timerEl.textContent = 'Expired';
+                    timerEl.classList.add('expired');
+                    resendBtn.disabled = false;
+                    showMessage('Verification code has expired. Please request a new one.', 'error');
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function showMessage(message, type = 'error') {
+            hideMessages();
+            const messageEl = type === 'error' ? errorMessage : successMessage;
+            messageEl.textContent = message;
+            messageEl.style.display = 'block';
+        }
+
+        function hideMessages() {
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+        }
+
+        function resendCode() {
+            if (resendCooldown > 0) return;
+
+            // Start cooldown
+            resendCooldown = 30;
+            resendBtn.disabled = true;
+            
+            resendInterval = setInterval(() => {
+                resendCooldown--;
+                resendBtn.textContent = `Resend Code (${resendCooldown}s)`;
+                
+                if (resendCooldown <= 0) {
+                    clearInterval(resendInterval);
+                    resendBtn.textContent = 'Resend Code';
+                    resendBtn.disabled = false;
+                }
+            }, 1000);
+
+            // Reset timer
+            clearInterval(timerInterval);
+            timeLeft = 300;
+            timerEl.classList.remove('expired');
+            startTimer();
+
+            // Clear current code
+            clearCode();
+            hideMessages();
+            
+            showMessage('New verification code sent to your email!', 'success');
+            
+            // Focus first input
+            codeInputs[0].focus();
+        }
+
+        // Form submission
+        document.getElementById('verifyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const enteredCode = getEnteredCode();
+            
+            if (enteredCode.length !== 6) {
+                showMessage('Please enter the complete 6-digit code');
+                return;
+            }
+
+            if (timeLeft <= 0) {
+                showMessage('Verification code has expired. Please request a new one.');
+                return;
+            }
+
+            // Show loading state
+            submitBtn.innerHTML = '<span class="loading"></span> Verifying...';
+            submitBtn.disabled = true;
+
+            // Simulate API call
+            setTimeout(() => {
+                if (enteredCode === correctCode) {
+                    // Success
+                    submitBtn.innerHTML = '✓ Verified!';
+                    submitBtn.style.background = '#28a745';
+                    
+                    showMessage('Email verified successfully! Redirecting...', 'success');
+                    
+                    // Add success animation
+                    document.querySelector('.auth-container').classList.add('success-animation');
+                    
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    // Error
+                    submitBtn.innerHTML = 'Verify Email';
+                    submitBtn.disabled = false;
+                    
+                    showError();
+                    showMessage('Invalid verification code. Please try again.');
+                    
+                    // Clear code after error
+                    setTimeout(() => {
+                        clearCode();
+                        codeInputs[0].focus();
+                    }, 1500);
+                }
+            }, 2000);
+        });
+
+        // Auto-focus first input
+        codeInputs[0].focus();
+
+        // Demo helper
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F1') {
+                e.preventDefault();
+                fillCode(correctCode);
+                showMessage('Demo code filled! (F1 shortcut)', 'success');
+            }
+        });
+    </script>
+</body>
+</html>
