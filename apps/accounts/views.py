@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from .models import Customer
 
 def register(request):
@@ -24,15 +25,57 @@ def register(request):
             messages.error(request, 'A user with this email already exists.')
             return render(request, 'register.html')
         
-        # Создание пользователя через create_user() (правильно для кастомной модели)
-        Customer.objects.create_user(
+        # Генерация username на основе email
+        username = email.split('@')[0]
+
+        # Создание пользователя через create_user()
+        user = Customer.objects.create_user(
+            username=username,
             first_name=first_name,
             last_name=last_name,
             email=email,
             password=password
         )
 
-        messages.success(request, 'Account created successfully! Please log in.')
-        return redirect('login')  # убедись, что в urls.py есть path с name='login'
-    
+        user=authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            messages.success(request, 'Account created successfully! You are noe logged in.')
+            return redirect('home')
+        else:
+            messages.error (request, 'There was a problem logging you in automatically. Please login manually.')
+            return redirect('login')
+        
     return render(request, 'register.html')
+
+def login_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email', '').strip()
+        password = request.POST.get('password', '')
+
+        if not email or not password:
+            messages.error(request, 'Both email and password are required.')
+            return render(request, 'login.html')
+        
+        # Ищем пользователя по email
+        try:
+            user_obj = Customer.objects.get(email=email)
+        except Customer.DoesNotExist:
+            messages.error(request, 'Invalid email or password.')
+            return render(request, 'login.html')
+        
+        # Аутентифицируем по username (так как authenticate требует username)
+        user = authenticate(request, username=user_obj.username, password=password)
+        if user is not None:
+            login(request, user)
+            messages.success(request, 'You have successfully logged in.')
+            return redirect('home')  # замени на маршрут своей главной страницы
+        else:
+            messages.error(request, 'Invalid email or password.')
+            return render(request, 'login.html')
+
+    return render(request, 'login.html')
+
+
+       
+
