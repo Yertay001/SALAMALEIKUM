@@ -368,7 +368,7 @@
         <div id="errorMessage" class="error-message" style="display: none;"></div>
         <div id="successMessage" class="success-message" style="display: none;"></div>
 
-        <form id="registerForm" method="post" action="{% url 'accouts:register' %}">
+        <form id="registerForm" method="post" action="{% url 'accounts:register' %}">
             {% csrf_token %}
             <div class="form-row">
                 <div class="form-group">
@@ -571,6 +571,11 @@
                     this.classList.remove('valid');
                 }
             });
+        });
+        form.addEventListener('submit', function (e) {
+            if (!validateForm()) {
+                e.preventDefault();
+            }       
         });
     </script>
 </body>
