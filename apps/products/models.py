@@ -14,6 +14,9 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
 
 class Size(models.Model):
     name = models.CharField(max_length=50)
@@ -23,17 +26,31 @@ class Size(models.Model):
 
 
 class Product(models.Model):
+    COLOR_CHOICES = [
+        ('white', 'Белый'),
+        ('black', 'Чёрный'),
+        ('green', 'Зелёный'),
+        ('red', 'Красный'),
+        ('blue', 'Синий'),
+        ('yellow', 'Жёлтый'),
+        ('beige', 'Бежевый'),
+        ('gray', 'Серый'),
+        ('brown', 'Коричневый'),
+        ('pink', 'Розовый'),
+        # Добавляй любые другие цвета по мере необходимости
+    ]
+
+    
     title = models.CharField(max_length=255)
     user_segment = models.ForeignKey(UserSegment, on_delete=models.CASCADE, related_name='user_segment_product')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category_product')
     description = models.TextField(blank=True, null=True)
     article = models.PositiveIntegerField()
-    color = models.CharField(max_length=50)
+    color = models.CharField(max_length=50, choices=COLOR_CHOICES)
     price = models.DecimalField(max_digits=20, decimal_places=2)
     size = models.ForeignKey(Size, on_delete=models.CASCADE, related_name='size_product')
     mane_image = models.ImageField(upload_to='products/main_images/')
     
-    # Assuming "CHOISE" means "Choice" field for sale type
     TYPE_SALE_CHOICES = [
         ('sale', 'Sale'),
         ('new', 'New'),
@@ -51,3 +68,4 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.product.title}"
+

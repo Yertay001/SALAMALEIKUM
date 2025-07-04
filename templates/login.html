@@ -363,7 +363,7 @@
         <div id="successMessage" class="success-message" style="display: none;"></div>
         <div id="attemptsWarning" class="login-attempts" style="display: none;"></div>
 
-        <form id="loginForm" method="post" action="{% url 'accounts:login ' %}" novalidate>
+        <form id="loginForm" method="post" action="{% url 'accounts:login' %}">
             {% csrf_token %}
             <div class="form-group">
                 <label for="email" class="form-label">Email Address</label>
@@ -490,55 +490,55 @@
             return { success: false, message: 'Invalid email or password' };
         }
 
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
+        // form.addEventListener('submit', function(e) {
+        //     e.preventDefault();
             
-            if (!validateForm()) {
-                return;
-            }
+        //     if (!validateForm()) {
+        //         return;
+        //     }
 
-            if (loginAttempts >= maxAttempts) {
-                showMessage('Account temporarily locked due to too many failed attempts. Please try again later.');
-                return;
-            }
+        //     if (loginAttempts >= maxAttempts) {
+        //         showMessage('Account temporarily locked due to too many failed attempts. Please try again later.');
+        //         return;
+        //     }
 
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
+        //     const email = document.getElementById('email').value.trim();
+        //     const password = document.getElementById('password').value;
 
-            // Show loading state
-            submitBtn.innerHTML = '<span class="loading"></span> Signing In...';
-            submitBtn.disabled = true;
+        //     // Show loading state
+        //     submitBtn.innerHTML = '<span class="loading"></span> Signing In...';
+        //     submitBtn.disabled = true;
 
-            // Simulate API call
-            setTimeout(() => {
-                const result = simulateLogin(email, password);
+        //     // Simulate API call
+        //     setTimeout(() => {
+        //         const result = simulateLogin(email, password);
                 
-                // Reset button
-                submitBtn.innerHTML = 'Sign In';
-                submitBtn.disabled = false;
+        //         // Reset button
+        //         submitBtn.innerHTML = 'Sign In';
+        //         submitBtn.disabled = false;
 
-                if (result.success) {
-                    showMessage(result.message, 'success');
+        //         if (result.success) {
+        //             showMessage(result.message, 'success');
                     
-                    // Save remember me preference
-                    if (document.getElementById('rememberMe').checked) {
-                        localStorage.setItem('rememberMe', 'true');
-                        localStorage.setItem('userEmail', email);
-                    }
+        //             // Save remember me preference
+        //             if (document.getElementById('rememberMe').checked) {
+        //                 localStorage.setItem('rememberMe', 'true');
+        //                 localStorage.setItem('userEmail', email);
+        //             }
                     
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 1500);
-                } else {
-                    loginAttempts++;
-                    showMessage(result.message);
+        //             setTimeout(() => {
+        //                 window.location.href = 'index.html';
+        //             }, 1500);
+        //         } else {
+        //             loginAttempts++;
+        //             showMessage(result.message);
                     
-                    if (loginAttempts >= maxAttempts - 1 && loginAttempts < maxAttempts) {
-                        showAttemptsWarning();
-                    }
-                }
-            }, 1500);
-        });
+        //             if (loginAttempts >= maxAttempts - 1 && loginAttempts < maxAttempts) {
+        //                 showAttemptsWarning();
+        //             }
+        //         }
+        //     }, 1500);
+        // });
 
         function socialLogin(provider) {
             showMessage(`${provider.charAt(0).toUpperCase() + provider.slice(1)} login would be implemented here`, 'success');
