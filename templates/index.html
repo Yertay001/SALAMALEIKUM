@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,588 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ShopBay - Clothing Store</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #ffffff;
-            color: #1a1a1a;
-            line-height: 1.6;
-        }
-
-        /* Header Styles */
-        .header {
-            background: #ffffff;
-            border-bottom: 1px solid #e5e5e5;
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #5B3FE2;
-            text-decoration: none;
-        }
-
-        .search-container {
-            flex: 1;
-            max-width: 400px;
-            margin: 0 2rem;
-            position: relative;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid #e5e5e5;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            background: #f8f9fa;
-            transition: all 0.2s ease;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: #5B3FE2;
-            box-shadow: 0 0 0 3px rgba(91, 63, 226, 0.1);
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .header-icon {
-            position: relative;
-            padding: 0.5rem;
-            border: none;
-            background: none;
-            cursor: pointer;
-            border-radius: 6px;
-            transition: background-color 0.2s ease;
-        }
-
-        .header-icon:hover {
-            background-color: #f6f6f6;
-        }
-
-        .header-icon svg {
-            width: 20px;
-            height: 20px;
-            stroke: #666;
-        }
-
-        .cart-badge {
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            background: #5B3FE2;
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 0.7rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-        }
-
-        /* Mobile Menu Toggle */
-        .mobile-menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            padding: 0.5rem;
-            cursor: pointer;
-        }
-
-        .mobile-menu-toggle svg {
-            width: 24px;
-            height: 24px;
-            stroke: #666;
-        }
-
-        /* Main Container */
-        .main-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 2rem;
-        }
-
-        /* Sidebar Styles */
-        .sidebar {
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 1.5rem;
-            height: fit-content;
-            position: sticky;
-            top: 100px;
-            border: 1px solid #f0f0f0;
-        }
-
-        .sidebar-section {
-            margin-bottom: 2rem;
-        }
-
-        .sidebar-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: #1a1a1a;
-        }
-
-        .category-list {
-            list-style: none;
-        }
-
-        .category-item {
-            margin-bottom: 0.5rem;
-        }
-
-        .category-link {
-            display: block;
-            padding: 0.75rem 1rem;
-            text-decoration: none;
-            color: #666;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-            font-weight: 500;
-        }
-
-        .category-link:hover,
-        .category-link.active {
-            background-color: #5B3FE2;
-            color: white;
-        }
-
-        /* Filter Styles */
-        .filter-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .filter-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            color: #1a1a1a;
-        }
-
-        .filter-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .filter-option {
-            padding: 0.5rem 0.75rem;
-            border: 1px solid #e5e5e5;
-            border-radius: 6px;
-            background: white;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.2s ease;
-        }
-
-        .filter-option:hover,
-        .filter-option.active {
-            border-color: #5B3FE2;
-            background-color: #5B3FE2;
-            color: white;
-        }
-
-        .color-filters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .color-option {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: 2px solid #e5e5e5;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-        }
-
-        .color-option.active {
-            border-color: #5B3FE2;
-            transform: scale(1.1);
-        }
-
-        .color-option::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-        }
-
-        .color-option.black::after { background-color: #000; }
-        .color-option.white::after { background-color: #fff; border: 1px solid #e5e5e5; }
-        .color-option.gray::after { background-color: #666; }
-        .color-option.red::after { background-color: #dc3545; }
-        .color-option.blue::after { background-color: #007bff; }
-        .color-option.green::after { background-color: #28a745; }
-        .color-option.orange::after { background-color: #fd7e14; }
-        .color-option.purple::after { background-color: #6f42c1; }
-
-        .price-range {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
-
-        .price-input {
-            flex: 1;
-            padding: 0.5rem;
-            border: 1px solid #e5e5e5;
-            border-radius: 6px;
-            font-size: 0.85rem;
-        }
-
-        .apply-filters {
-            width: 100%;
-            padding: 0.75rem;
-            background: #5B3FE2;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-            margin-top: 1rem;
-        }
-
-        .apply-filters:hover {
-            background: #4a32d1;
-        }
-
-        /* Content Area */
-        .content-area {
-            min-height: 100vh;
-        }
-
-        .content-header {
-            display: flex;
-            justify-content: between;
-            align-items: center;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .page-title {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #1a1a1a;
-        }
-
-        .sort-container {
-            margin-left: auto;
-        }
-
-        .sort-select {
-            padding: 0.75rem 1rem;
-            border: 1px solid #e5e5e5;
-            border-radius: 8px;
-            background: white;
-            font-size: 0.9rem;
-            cursor: pointer;
-        }
-
-        /* Product Grid */
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .product-card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            border: 1px solid #f0f0f0;
-        }
-
-        .product-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-        }
-
-        .product-image {
-            position: relative;
-            overflow: hidden;
-            aspect-ratio: 1;
-        }
-
-        .product-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .product-card:hover .product-image img {
-            transform: scale(1.05);
-        }
-
-        .product-badge {
-            position: absolute;
-            top: 0.75rem;
-            left: 0.75rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .badge-new {
-            background: #28a745;
-            color: white;
-        }
-
-        .badge-bestseller {
-            background: #5B3FE2;
-            color: white;
-        }
-
-        .badge-sale {
-            background: #dc3545;
-            color: white;
-        }
-
-        .product-info {
-            padding: 1.25rem;
-        }
-
-        .product-title {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #1a1a1a;
-            line-height: 1.4;
-        }
-
-        .product-price {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .current-price {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #1a1a1a;
-        }
-
-        .original-price {
-            font-size: 0.9rem;
-            color: #999;
-            text-decoration: line-through;
-        }
-
-        .discount {
-            font-size: 0.8rem;
-            color: #dc3545;
-            font-weight: 600;
-        }
-
-        .add-to-cart {
-            width: 100%;
-            padding: 0.75rem;
-            background: #5B3FE2;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .add-to-cart:hover {
-            background: #4a32d1;
-            transform: translateY(-1px);
-        }
-
-        .add-to-cart:active {
-            transform: translateY(0);
-        }
-
-        /* Pagination */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 0.5rem;
-            margin-top: 3rem;
-        }
-
-        .pagination-item {
-            padding: 0.75rem 1rem;
-            border: 1px solid #e5e5e5;
-            background: white;
-            color: #666;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-            font-weight: 500;
-        }
-
-        .pagination-item:hover,
-        .pagination-item.active {
-            background: #5B3FE2;
-            color: white;
-            border-color: #5B3FE2;
-        }
-
-        .pagination-item.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .header-container {
-                padding: 0 1rem;
-            }
-
-            .search-container {
-                display: none;
-            }
-
-            .mobile-menu-toggle {
-                display: block;
-            }
-
-            .main-container {
-                grid-template-columns: 1fr;
-                padding: 1rem;
-                gap: 1rem;
-            }
-
-            .sidebar {
-                position: fixed;
-                top: 0;
-                left: -100%;
-                width: 280px;
-                height: 100vh;
-                background: white;
-                z-index: 1000;
-                transition: left 0.3s ease;
-                overflow-y: auto;
-                padding-top: 5rem;
-            }
-
-            .sidebar.open {
-                left: 0;
-            }
-
-            .sidebar-overlay {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.5);
-                z-index: 999;
-                display: none;
-            }
-
-            .sidebar-overlay.open {
-                display: block;
-            }
-
-            .product-grid {
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                gap: 1rem;
-            }
-
-            .content-header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .sort-container {
-                margin-left: 0;
-            }
-
-            .pagination {
-                flex-wrap: wrap;
-                gap: 0.25rem;
-            }
-
-            .pagination-item {
-                padding: 0.5rem 0.75rem;
-                font-size: 0.9rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .product-grid {
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            }
-        }
-
-        /* Loading Animation */
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 3rem;
-        }
-
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #5B3FE2;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Hidden class for mobile */
-        .hidden {
-            display: none;
-        }
-    </style>
 </head>
 <body>
     <!-- Header -->
@@ -603,7 +24,7 @@
             <a href="#" class="logo">ShopBay</a>
             
             <div class="search-container">
-                <input type="text" class="search-input" placeholder="Search products..." id="searchInput">
+                <input type="text" class="search-input" placeholder="Поиск..." id="searchInput">
             </div>
             
             <div class="header-actions">
@@ -637,102 +58,154 @@
 
     <!-- Main Container -->
     <div class="main-container">
-        <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-section">
-                <h3 class="sidebar-title">Category</h3>
-                <ul class="category-list">
-                    <li class="category-item">
-                        <a href="#" class="category-link active" data-category="sweatshirt">Sweatshirt</a>
-                    </li>
-                    <li class="category-item">
-                        <a href="#" class="category-link" data-category="hoodie">Hoodie</a>
-                    </li>
-                    <li class="category-item">
-                        <a href="#" class="category-link" data-category="t-shirt">T-Shirt</a>
-                    </li>
-                    <li class="category-item">
-                        <a href="#" class="category-link" data-category="pants">Pants</a>
-                    </li>
-                    <li class="category-item">
-                        <a href="#" class="category-link" data-category="jacket">Jacket</a>
-                    </li>
-                    <li class="category-item">
-                        <a href="#" class="category-link" data-category="shoes">Shoes</a>
-                    </li>
-                    <li class="category-item">
-                        <a href="#" class="category-link" data-category="accessories">Surface Accessories</a>
-                    </li>
-                </ul>
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+    <form method="get" id="filterForm">
+        <div class="sidebar-section">
+            <div class="filter-group">
+                <div class="filter-options">
+                    <button type="submit" class="filter-btn" name="usersegment" value="">Все</button>
+                    {% for usersegment in usersegments %}
+                        <button type="submit" class="filter-btn" name="usersegment" value="{{ usersegment.name }}">{{ usersegment.name }}</button>
+                    {% endfor %}
+                </div>
             </div>
 
-            <div class="sidebar-section">
-                <h3 class="sidebar-title">Filter by</h3>
-                
-                <div class="filter-group">
-                    <h4 class="filter-title">Type</h4>
-                    <div class="filter-options">
-                        <div class="filter-option" data-filter="type" data-value="new">New</div>
-                        <div class="filter-option" data-filter="type" data-value="bestseller">Best Seller</div>
-                        <div class="filter-option" data-filter="type" data-value="sale">Sale</div>
-                    </div>
+            <h3 class="sidebar-title">Коллекция</h3>
+            <div class="filter-group">
+                <div class="filter-options">
+                    <button type="submit" class="filter-btn" name="category" value="">Все</button>
+                    {% for category in categories %} 
+                        <button type="submit" class="filter-btn" name="category" value="{{ category.title }}">{{ category.title }}</button>
+                    {% endfor %}
                 </div>
-
-                <div class="filter-group">
-                    <h4 class="filter-title">Colour</h4>
-                    <div class="color-filters">
-                        <div class="color-option black" data-filter="color" data-value="black"></div>
-                        <div class="color-option white" data-filter="color" data-value="white"></div>
-                        <div class="color-option gray" data-filter="color" data-value="gray"></div>
-                        <div class="color-option red" data-filter="color" data-value="red"></div>
-                        <div class="color-option blue" data-filter="color" data-value="blue"></div>
-                        <div class="color-option green" data-filter="color" data-value="green"></div>
-                        <div class="color-option orange" data-filter="color" data-value="orange"></div>
-                        <div class="color-option purple" data-filter="color" data-value="purple"></div>
-                    </div>
-                </div>
-
-                <div class="filter-group">
-                    <h4 class="filter-title">Size</h4>
-                    <div class="filter-options">
-                        <div class="filter-option" data-filter="size" data-value="xs">XS</div>
-                        <div class="filter-option" data-filter="size" data-value="s">S</div>
-                        <div class="filter-option" data-filter="size" data-value="m">M</div>
-                        <div class="filter-option" data-filter="size" data-value="l">L</div>
-                        <div class="filter-option" data-filter="size" data-value="xl">XL</div>
-                    </div>
-                </div>
-
-                <div class="filter-group">
-                    <h4 class="filter-title">Price</h4>
-                    <div class="price-range">
-                        <input type="number" class="price-input" placeholder="Min" id="minPrice">
-                        <span>-</span>
-                        <input type="number" class="price-input" placeholder="Max" id="maxPrice">
-                    </div>
-                </div>
-
-                <button class="apply-filters" onclick="applyFilters()">Apply</button>
             </div>
-        </aside>
+        </div>
+
+        <div class="sidebar-section">
+            <h3 class="sidebar-title">Фильтр</h3>
+            <div class="filter-group">
+                <h4 class="filter-title">Тип</h4>
+                <div class="filter-options">
+                    <button type="submit" class="filter-btn" name="type" value="">Все</button>
+                    <button type="submit" class="filter-btn" name="type" value="new">New</button>
+                    <button type="submit" class="filter-btn" name="type" value="bestseller">Best Seller</button>
+                    <button type="submit" class="filter-btn" name="type" value="sale">Sale</button>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <h4 class="filter-title">Цвет</h4>
+                <div class="color-filters">
+                    <button class="color-option all" name="color" value=""></button>
+                    <button class="color-option black" name="color" value="black"></button>
+                    <button class="color-option white" name="color" value="white"></button>
+                    <button class="color-option gray" name="color" value="gray"></button>
+                    <button class="color-option red" name="color" value="red"></button>
+                    <button class="color-option blue" name="color" value="blue"></button>
+                    <button class="color-option green" name="color" value="green"></button>
+                    <button class="color-option orange" name="color" value="orange"></button>
+                    <button class="color-option purple" name="color" value="purple"></button>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <h4 class="filter-title">Размер</h4>
+                <div class="filter-options">
+                    <button type="submit" class="filter-btn" name="size" value="">Все</button>
+                    <button type="submit" class="filter-btn" name="size" value="s">S</button>
+                    <button type="submit" class="filter-btn" name="size" value="m">M</button>
+                    <button type="submit" class="filter-btn" name="size" value="l">L</button>
+                    <button type="submit" class="filter-btn" name="size" value="xl">XL</button>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <h4 class="filter-title">Цена</h4>
+                <div class="price-range">
+                    <input type="number" class="price-input" placeholder="Мин" name="min_price" onchange="this.form.submit()">
+                    <span>-</span>
+                    <input type="number" class="price-input" placeholder="Макс" name="max_price" onchange="this.form.submit()">
+                </div>
+            </div>
+        </div>
+    </form>
+</aside>
+
+<style>
+    .filter-btn {
+        display: inline-block;
+        margin: 4px;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        background-color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .filter-btn:hover {
+        background-color: #eee;
+    }
+
+    .color-option {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 1px solid #999;
+        margin: 3px;
+        display: inline-block;
+        cursor: pointer;
+    }
+    .color-option.all {
+        background: repeating-conic-gradient(#ccc 0% 25%, white 0% 50%) 50% / 10px 10px;
+    }
+    .color-option.black { background-color: black; }
+    .color-option.white { background-color: white; }
+    .color-option.gray { background-color: gray; }
+    .color-option.red { background-color: red; }
+    .color-option.blue { background-color: blue; }
+    .color-option.green { background-color: green; }
+    .color-option.orange { background-color: orange; }
+    .color-option.purple { background-color: purple; }
+</style>
+
 
         <!-- Content Area -->
         <main class="content-area">
             <div class="content-header">
-                <h1 class="page-title" id="pageTitle">Sweatshirt</h1>
+                <h1 class="page-title" id="pageTitle">Рубашки</h1>
                 <div class="sort-container">
                     <select class="sort-select" id="sortSelect" onchange="sortProducts()">
-                        <option value="popular">Sort by Most Popular</option>
-                        <option value="price-low">Price: Low to High</option>
-                        <option value="price-high">Price: High to Low</option>
-                        <option value="newest">Newest First</option>
-                        <option value="rating">Highest Rated</option>
+                        <option value="popular">Популярные</option>
+                        <option value="price-low">Цена: Сначала дешевые</option>
+                        <option value="price-high">Цена: Сначала дорогие</option>
+                        <option value="newest">Новинки</option>
+                        <option value="rating">Высокий рейтинг</option>
                     </select>
                 </div>
             </div>
 
             <div class="product-grid" id="productGrid">
-                <!-- Products will be dynamically loaded here -->
+                {% for product in products %}
+                <div class="product-card">
+                    <a href="#">
+                    <div class="product-image">
+                        <img src="{{ product.mane_image.url }}" alt="{{ product.title }}">
+                        <div class="product-badge badge-{{ product.type_sale }}">
+                            {{ product.get_type_sale_display }}
+                    </div>
+                </a>
+                </div>
+                 <div class="product-info">
+            <h3 class="product-title">{{ product.title }}</h3>
+            <p class="product-color">Цвет: {{ product.get_color_display }}</p>
+            <p class="product-size">Размер: {{ product.size.name }}</p>
+            <p class="product-price">{{ product.price }} ₸</p>
+            <button class="add-to-cart">Добавить в корзину</button>
+        </div>
+    </div>
+    {% endfor %}
             </div>
 
             <div class="pagination" id="pagination">
@@ -742,155 +215,6 @@
     </div>
 
     <script>
-        // Product Data
-        const products = [
-            {
-                id: 1,
-                name: "Love Pattern Striped Sweatshirt",
-                price: 200,
-                originalPrice: null,
-                category: "sweatshirt",
-                type: "new",
-                color: "white",
-                size: ["s", "m", "l", "xl"],
-                image: "https://images.pexels.com/photos/7679720/pexels-photo-7679720.jpeg?auto=compress&cs=tinysrgb&w=400",
-                badge: "NEW"
-            },
-            {
-                id: 2,
-                name: "Street Fantasy Sweatshirt",
-                price: 200,
-                originalPrice: null,
-                category: "sweatshirt",
-                type: "bestseller",
-                color: "black",
-                size: ["xs", "s", "m", "l"],
-                image: "https://images.pexels.com/photos/7679745/pexels-photo-7679745.jpeg?auto=compress&cs=tinysrgb&w=400",
-                badge: "BEST SELLER"
-            },
-            {
-                id: 3,
-                name: "Streetwear NYC Sweatshirt",
-                price: 200,
-                originalPrice: 250,
-                category: "sweatshirt",
-                type: "sale",
-                color: "red",
-                size: ["s", "m", "l", "xl"],
-                image: "https://images.pexels.com/photos/7679728/pexels-photo-7679728.jpeg?auto=compress&cs=tinysrgb&w=400",
-                badge: "SALE"
-            },
-            {
-                id: 4,
-                name: "Basic Beige Shirt",
-                price: 120,
-                originalPrice: 150,
-                category: "sweatshirt",
-                type: "sale",
-                color: "gray",
-                size: ["xs", "s", "m", "l", "xl"],
-                image: "https://images.pexels.com/photos/7679722/pexels-photo-7679722.jpeg?auto=compress&cs=tinysrgb&w=400",
-                badge: null
-            },
-            {
-                id: 5,
-                name: "Basic Orange Sweatshirt",
-                price: 140,
-                originalPrice: null,
-                category: "sweatshirt",
-                type: "new",
-                color: "orange",
-                size: ["s", "m", "l", "xl"],
-                image: "https://images.pexels.com/photos/7679730/pexels-photo-7679730.jpeg?auto=compress&cs=tinysrgb&w=400",
-                badge: "NEW"
-            },
-            {
-                id: 6,
-                name: "Art Sweatshirt X Anson Lo",
-                price: 180,
-                originalPrice: null,
-                category: "sweatshirt",
-                type: "bestseller",
-                color: "green",
-                size: ["s", "m", "l"],
-                image: "https://images.pexels.com/photos/7679732/pexels-photo-7679732.jpeg?auto=compress&cs=tinysrgb&w=400",
-                badge: "BEST SELLER"
-            },
-            {
-                id: 7,
-                name: "Flannel Printed Sweatshirt",
-                price: 210,
-                originalPrice: null,
-                category: "sweatshirt",
-                type: "new",
-                color: "red",
-                size: ["xs", "s", "m", "l", "xl"],
-                image: "https://images.pexels.com/photos/7679726/pexels-photo-7679726.jpeg?auto=compress&cs=tinysrgb&w=400",
-                badge: "NEW"
-            },
-            {
-                id: 8,
-                name: "Relaxed Fit Printed Sweatshirt",
-                price: 200,
-                originalPrice: null,
-                category: "sweatshirt",
-                type: "bestseller",
-                color: "white",
-                size: ["s", "m", "l", "xl"],
-                image: "https://images.pexels.com/photos/7679724/pexels-photo-7679724.jpeg?auto=compress&cs=tinysrgb&w=400",
-                badge: "BEST SELLER"
-            },
-            {
-                id: 9,
-                name: "Letter Pattern Activate Vest",
-                price: 240,
-                originalPrice: null,
-                category: "sweatshirt",
-                type: "new",
-                color: "green",
-                size: ["s", "m", "l", "xl"],
-                image: "https://images.pexels.com/photos/7679736/pexels-photo-7679736.jpeg?auto=compress&cs=tinysrgb&w=400",
-                badge: "NEW"
-            },
-            // Add more products for other categories
-            {
-                id: 10,
-                name: "Classic Hoodie",
-                price: 160,
-                originalPrice: null,
-                category: "hoodie",
-                type: "bestseller",
-                color: "black",
-                size: ["s", "m", "l", "xl"],
-                image: "https://images.pexels.com/photos/6311612/pexels-photo-6311612.jpeg?auto=compress&cs=tinysrgb&w=400",
-                badge: "BEST SELLER"
-            },
-            {
-                id: 11,
-                name: "Vintage T-Shirt",
-                price: 85,
-                originalPrice: null,
-                category: "t-shirt",
-                type: "new",
-                color: "white",
-                size: ["xs", "s", "m", "l", "xl"],
-                image: "https://images.pexels.com/photos/7679727/pexels-photo-7679727.jpeg?auto=compress&cs=tinysrgb&w=400",
-                badge: "NEW"
-            },
-            {
-                id: 12,
-                name: "Denim Jacket",
-                price: 320,
-                originalPrice: null,
-                category: "jacket",
-                type: "bestseller",
-                color: "blue",
-                size: ["s", "m", "l", "xl"],
-                image: "https://images.pexels.com/photos/7679735/pexels-photo-7679735.jpeg?auto=compress&cs=tinysrgb&w=400",
-                badge: "BEST SELLER"
-            }
-        ];
-
         // Application State
         let currentCategory = 'sweatshirt';
         let currentFilters = {
@@ -1024,36 +348,6 @@
             }
         }
 
-        function displayProducts(products) {
-            const startIndex = (currentPage - 1) * productsPerPage;
-            const endIndex = startIndex + productsPerPage;
-            const pageProducts = products.slice(startIndex, endIndex);
-
-            const productGrid = document.getElementById('productGrid');
-            
-            if (pageProducts.length === 0) {
-                productGrid.innerHTML = '<div style="text-align: center; padding: 3rem; color: #666;">No products found</div>';
-                return;
-            }
-
-            productGrid.innerHTML = pageProducts.map(product => `
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="${product.image}" alt="${product.name}">
-                        ${product.badge ? `<div class="product-badge badge-${product.type}">${product.badge}</div>` : ''}
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-title">${product.name}</h3>
-                        <div class="product-price">
-                            <span class="current-price">$${product.price}</span>
-                            ${product.originalPrice ? `<span class="original-price">$${product.originalPrice}</span>` : ''}
-                            ${product.originalPrice ? `<span class="discount">-${Math.round((1 - product.price / product.originalPrice) * 100)}%</span>` : ''}
-                        </div>
-                        <button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>
-                    </div>
-                </div>
-            `).join('');
-        }
 
         function displayPagination(totalProducts) {
             const totalPages = Math.ceil(totalProducts / productsPerPage);
@@ -1172,3 +466,4 @@
     </script>
 </body>
 </html>
+
