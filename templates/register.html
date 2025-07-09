@@ -368,7 +368,7 @@
         <div id="errorMessage" class="error-message" style="display: none;"></div>
         <div id="successMessage" class="success-message" style="display: none;"></div>
 
-        <form id="registerForm" method="post" action="{% url 'accounts:register' %}">
+        <form id="registerForm" method="post" action="{% url 'register' %}">
             {% csrf_token %}
             <div class="form-row">
                 <div class="form-group">
