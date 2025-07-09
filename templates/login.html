@@ -363,7 +363,7 @@
         <div id="successMessage" class="success-message" style="display: none;"></div>
         <div id="attemptsWarning" class="login-attempts" style="display: none;"></div>
 
-        <form id="loginForm" method="post" action="{% url 'accounts:login' %}">
+        <form id="loginForm" method="post" action="{% url 'login' %}">
             {% csrf_token %}
             <div class="form-group">
                 <label for="email" class="form-label">Email Address</label>

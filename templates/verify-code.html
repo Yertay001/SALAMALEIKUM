@@ -331,14 +331,15 @@
             <h2 class="auth-title">Verify Your Email</h2>
             <p class="auth-subtitle">
                 We've sent a 6-digit verification code to<br>
-                <span class="email-display" id="userEmail">your.email@example.com</span>
+                <span class="email-display" id="userEmail">{{ user.email }}</span>
             </p>
         </div>
 
         <div id="errorMessage" class="error-message" style="display: none;"></div>
         <div id="successMessage" class="success-message" style="display: none;"></div>
 
-        <form id="verifyForm">
+        <form id="verifyForm" action="{% url 'check_auth_code' %}" method="POST">
+            {% csrf_token %}
             <div class="code-input-container">
                 <input type="text" class="code-input" maxlength="1" id="code1" autocomplete="off">
                 <input type="text" class="code-input" maxlength="1" id="code2" autocomplete="off">
@@ -569,11 +570,11 @@
 
         // Form submission
         document.getElementById('verifyForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
             const enteredCode = getEnteredCode();
-            
+
+            // если код не полный — показываем ошибку
             if (enteredCode.length !== 6) {
+                e.preventDefault();
                 showMessage('Please enter the complete 6-digit code');
                 return;
             }
@@ -582,42 +583,17 @@
                 showMessage('Verification code has expired. Please request a new one.');
                 return;
             }
+            let hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'auth_code';
+            hiddenInput.value = enteredCode;
+            this.appendChild(hiddenInput);
 
             // Show loading state
             submitBtn.innerHTML = '<span class="loading"></span> Verifying...';
             submitBtn.disabled = true;
-
-            // Simulate API call
-            setTimeout(() => {
-                if (enteredCode === correctCode) {
-                    // Success
-                    submitBtn.innerHTML = '✓ Verified!';
-                    submitBtn.style.background = '#28a745';
-                    
-                    showMessage('Email verified successfully! Redirecting...', 'success');
-                    
-                    // Add success animation
-                    document.querySelector('.auth-container').classList.add('success-animation');
-                    
-                    setTimeout(() => {
-                        window.location.href = 'login.html';
-                    }, 2000);
-                } else {
-                    // Error
-                    submitBtn.innerHTML = 'Verify Email';
-                    submitBtn.disabled = false;
-                    
-                    showError();
-                    showMessage('Invalid verification code. Please try again.');
-                    
-                    // Clear code after error
-                    setTimeout(() => {
-                        clearCode();
-                        codeInputs[0].focus();
-                    }, 1500);
-                }
-            }, 2000);
         });
+
 
         // Auto-focus first input
         codeInputs[0].focus();
