@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main-container">
+    <!-- Sidebar with profile info -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-section">
+            <h2 class="sidebar-title">Профиль</h2>
+            <div style="text-align: center;">
+                {% if profile.image %}
+                    <img src="{{ profile.image.url }}" alt="Фото профиля" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 1rem;">
+                {% else %}
+                    <div style="width: 100px; height: 100px; border-radius: 50%; background: #f0f0f0; margin: 0 auto 1rem auto;"></div>
+                {% endif %}
+                <p><strong>{{ user.first_name }} {{ user.last_name }}</strong></p>
+                <p style="font-size: 0.9rem; color: #666;">{{ user.email }}</p>
+            </div>
+
+            <hr style="margin: 1.5rem 0; border-color: #eee;">
+
+            <ul style="font-size: 0.9rem; color: #444;">
+                <li><strong>Страна:</strong> {{ profile.country|default:"—" }}</li>
+                <li><strong>Дата рождения:</strong> {{ profile.birth_date|date:"d.m.Y"|default:"—" }}</li>
+                <li><strong>Пол:</strong> {{ profile.get_gender_display|default:"—" }}</li>
+                <li><strong>Телефон:</strong> {{ profile.phone_number|default:"—" }}</li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- Orders area -->
+    <div class="content-area">
+        <div class="content-header">
+            <h1 class="page-title" id="pageTitle">История заказов</h1>
+        </div>
+
+        <div>
+            {% if orders %}
+                <div class="product-grid">
+                    {% for order in orders %}
+                        <div class="product-card">
+                            <div class="product-info">
+                                <p class="product-title">Заказ №{{ order.id }}</p>
+                                <p class="product-price">
+                                    <span class="current-price">{{ order.total_price }} ₸</span>
+                                </p>
+                                <p style="font-size: 0.85rem; color: #888;">Дата: {{ order.created_at|date:"d.m.Y H:i" }}</p>
+                                <p style="font-size: 0.85rem; color: #888;">Статус: {{ order.get_status_display }}</p>
+                                <a href="{% url 'order_detail' order.id %}" class="auth-link" style="display: inline-block; margin-top: 1rem;">Подробнее</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>У вас пока нет заказов.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

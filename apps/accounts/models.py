@@ -29,14 +29,20 @@ class Customer(AbstractUser):
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
     email = models.EmailField(unique=True)
+    auth_code = models.CharField(max_length=6, 
+                                 blank=True, 
+                                 null=True, 
+                                 verbose_name='Код авторизации')
+
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
+
 
     USERNAME_FIELD = 'email'
 
     REQUIRED_FIELDS = ['first_name']
 
-    objects = CustomerManager()  # Вот это — обязательно!
+    objects = CustomerManager()
 
 
 
@@ -49,13 +55,12 @@ class Profile(models.Model):
         ('woman', 'Woman'),
     ]
         
-    image = models.ImageField(upload_to='profile_images')
+    image = models.ImageField(upload_to='profile_images', blank=True, null=True)
     customer = models.OneToOneField(Customer, on_delete=models.CASCADE)
-    birth_date = models.DateField()
-    gender = models.CharField(max_length=20, choices=GENDER)
-
-    country = models.CharField(max_length=150)
-    phone_number = models.CharField(max_length=150, unique=True)
+    birth_date = models.DateField(blank=True, null=True)
+    gender = models.CharField(max_length=20, choices=GENDER, blank=True, null=True)
+    country = models.CharField(max_length=150, blank=True, null=True)
+    phone_number = models.CharField(max_length=150, blank=True, null=True)
 
     def _str__(self):
         return f"{self.customer} - {self.gender} - {self.birth_date}"

@@ -96,3 +96,19 @@ button:focus-visible {
 }
 
 
+
+
+.auth-link {
+    margin-left: 1rem;
+    font-size: 0.95rem;
+    color: #5B3FE2;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: background 0.2s ease;
+}
+
+.auth-link:hover {
+    background-color: rgba(91, 63, 226, 0.1);
+}

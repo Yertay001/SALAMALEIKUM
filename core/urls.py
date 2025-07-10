@@ -21,8 +21,9 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include ('apps.accounts.urls', namespace='accounts')),
-    path('', include('apps.products.urls')),  # подключение твоего index как главной страницы
+    path('accounts/', include ('apps.accounts.urls')),
+    path('', include('apps.products.urls')), 
+    path('orders/', include('apps.orders.urls')),
 ]
 
 
