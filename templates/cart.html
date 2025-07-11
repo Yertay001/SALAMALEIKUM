@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<div class="main-container" style="padding: 3rem 1rem; max-width: 1200px; margin: 0 auto;">
+    <h2 style="font-weight: 500; font-size: 1rem; letter-spacing: 1px; margin-bottom: 2rem;">КОРЗИНА [{{ cart_items|length }}]</h2>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 2rem;">
+        {% for item in cart_items %}
+        <div style="width: 260px; display: flex; flex-direction: column; gap: 0.5rem;">
+            <img src="{{ item.product.mane_image.url }}" alt="{{ item.product.title }}" style="width: 100%; border: none; object-fit: cover;" />
+            <div style="font-size: 0.9rem; color: #000;">
+                <p style="margin: 0; font-weight: 400;">{{ item.product.title|truncatechars:20 }}</p>
+                <p style="margin: 0; font-size: 0.85rem; color: #555;">{{ item.product.size }} | {{ item.product.color }}</p>
+                <p style="margin: 0;">₸ {{ item.product.price|floatformat:0 }}</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem;">
+                <a href="{% url 'decrease_amount' item.id %}" style="font-size: 1.5rem; color: #000; text-decoration: none;">−</a>
+                <span>{{ item.amount }}</span>
+                <a href="{% url 'increase_amount' item.id %}" style="font-size: 1.5rem; color: #000; text-decoration: none;">+</a>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Summary Section -->
+    <!-- <div class="cart-summary"> -->
+    <!-- <div class="notice">
+        Продолжая, я подтверждаю, что прочитал(-а) и принимаю
+        <a href="#">условия покупки</a>, а также понимаю
+        <a href="#">политику конфиденциальности</a> и
+        <a href="#">использования файлов cookie</a>.
+    </div>
+    <div class="total">
+        <p class="label">ИТОГО</p>
+        <p class="amount">₸ {{ cart.total_price|floatformat:0 }}</p>
+        <p class="tax-note">* Включая НДС</p>
+        <a href="" class="checkout-btn">ПРОДОЛЖИТЬ</a>
+    </div>
+    </div> -->
+<img src="{{ item.product.mane_image.url }}" alt="{{ item.product.title }}" style="width: 100%; border: none; object-fit: cover;" />
+
+
+<div style="
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: white;
+    border: 1px solid #e1e1e1;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    padding: 1.5rem 2rem;
+    width: 280px;
+    z-index: 1000;
+">
+    <p style="font-size: 0.75rem; color: #777;">
+        Продолжая, я подтверждаю, что прочитал(-а) и принимаю
+        <a href="#">условия покупки</a>, а также понимаю
+        <a href="#">политику конфиденциальности</a> и
+        <a href="#">использования файлов cookie</a>.
+    </p>
+    <p style="font-weight: 500; font-size: 1rem; margin: 1rem 0 0.25rem;">ИТОГО</p>
+    <p style="font-size: 1.4rem; font-weight: 600; margin: 0 0 0.5rem;">₸ {{ cart.total_price|floatformat:0 }}</p>
+    <p style="font-size: 0.75rem; color: #888;">* Включая НДС</p>
+    <a href="#" style="
+        display: block;
+        margin-top: 1rem;
+        background-color: #000;
+        color: white;
+        text-align: center;
+        padding: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-decoration: none;
+        text-transform: uppercase;
+    ">
+        Продолжить
+    </a>
+</div>
+
+    
+{% endblock content%}

@@ -1,0 +1,121 @@
+.cart-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-top: 4rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+}
+
+.cart-summary .notice {
+  font-size: 0.75rem;
+  color: #444;
+  line-height: 1.4;
+  max-width: 400px;
+  flex: 1 1 300px;
+}
+
+.cart-summary .notice a {
+  color: black;
+  text-decoration: underline;
+}
+
+.cart-summary .total {
+  text-align: left;
+  flex: 1 1 220px;
+  margin-top: 1rem;
+}
+
+.cart-summary .total p {
+  margin: 0;
+}
+
+.cart-summary .label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.cart-summary .amount {
+  font-size: 1.4rem;
+  margin-top: 0.25rem;
+}
+
+.cart-summary .tax-note {
+  font-size: 0.75rem;
+  color: #777;
+  margin-top: 0.3rem;
+}
+
+.checkout-btn {
+  display: inline-block;
+  background: #000;
+  color: #fff;
+  padding: 0.75rem 2rem;
+  font-size: 0.9rem;
+  text-decoration: none;
+  margin-top: 1rem;
+  transition: background 0.2s ease;
+}
+
+.checkout-btn:hover {
+  background: #222;
+}
+
+/* Сетка для избранного */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.product-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+.product-card img {
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.product-card h3 {
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+}
+
+.product-card p {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.product-card a {
+  display: inline-block;
+  color: #c00;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.product-card a:hover {
+  text-decoration: underline;
+}
