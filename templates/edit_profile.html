@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .profile-edit-container {
+        max-width: 600px;
+        margin: 2rem auto;
+        background: #ffffff;
+        padding: 2rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    }
+    .profile-edit-container h2 {
+        margin-top: 0;
+        margin-bottom: 1.5rem;
+    }
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+    }
+    .form-actions {
+        text-align: right;
+        margin-top: 1.5rem;
+    }
+    .form-actions button {
+        background-color: #5B3FE2;
+        color: white;
+        padding: 0.6rem 1.2rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+    }
+    .back-link {
+        margin-top: 1rem;
+        display: block;
+        text-align: left;
+    }
+    .back-link a {
+        color: #5B3FE2;
+        text-decoration: none;
+        font-size: 0.95rem;
+    }
+</style>
+
+<div class="profile-edit-container">
+    <h2>Редактировать профиль</h2>
+
+    <form method="POST" action="{% url 'edit_profile' %}"  enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="first_name">Имя:</label>
+            <input type="text" name="first_name" id="first_name" value="{{ user.first_name }}">
+        </div>
+
+        <div class="form-group">
+            <label for="last_name">Фамилия:</label>
+            <input type="text" name="last_name" id="last_name" value="{{ user.last_name }}">
+        </div>
+
+        <div class="form-group">
+            <label for="birth_date">Дата рождения:</label>
+            <input type="date" name="birth_date" id="birth_date" value="{{ profile.birth_date|date:'Y-m-d' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="gender">Пол:</label>
+            <select name="gender" id="gender">
+                <option value="">-- Выберите --</option>
+                <option value="man" {% if profile.gender == 'man' %}selected{% endif %}>Мужской</option>
+                <option value="woman" {% if profile.gender == 'woman' %}selected{% endif %}>Женский</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="country">Страна:</label>
+            <input type="text" name="country" id="country" value="{{ profile.country }}">
+        </div>
+
+        <div class="form-group">
+            <label for="phone_number">Телефон:</label>
+            <input type="text" name="phone_number" id="phone_number" value="{{ profile.phone_number }}">
+        </div>
+
+        <div class="form-group">
+            <label for="image">Аватар:</label>
+            <input type="file" name="image" id="image">
+        </div>
+
+        <div class="form-actions">
+            <button type="submit">Сохранить</button>
+        </div>
+    </form>
+
+    <div class="back-link">
+        <a href="{% url 'profile' %}">← Назад к профилю</a>
+    </div>
+</div>
+{% endblock %}

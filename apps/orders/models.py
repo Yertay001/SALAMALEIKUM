@@ -16,6 +16,10 @@ class CartItem(models.Model):
     amount= models.PositiveIntegerField()
     product= models.ForeignKey(Product, on_delete=models.CASCADE, related_name="product_cartitem")
 
+    @property
+    def total_price(self):
+        return self.amount * self.product.price
+
     def __str__(self):
         return f"{self.cart.customer.first_name} - {self.amount} - {self.product}"
 

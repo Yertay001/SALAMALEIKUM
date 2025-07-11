@@ -23,6 +23,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include ('apps.accounts.urls')),
     path('', include('apps.products.urls')),  # подключение твоего index как главной страницы
+    path('orders/', include('apps.orders.urls')),
+    path('favorites/', include('apps.favorites.urls')),
+
 ]
 
 

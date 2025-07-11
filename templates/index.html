@@ -138,22 +138,37 @@
             <div class="product-grid" id="productGrid">
                 {% for product in products %}
                 <div class="product-card">
-                    <a href="#">
-                    <div class="product-image">
+                    
+                    <div class="product-image" style="position: relative;">
                         <img src="{{ product.mane_image.url }}" alt="{{ product.title }}">
+
+                        <!-- СЕРДЕЧКО (ПРАВИЛЬНО: внутри блока изображения) -->
+                        <a href="{% url 'favorites:toggle_favorite' product_id=product.id %}" 
+                            style="position: absolute; top: 10px; right: 10px; font-size: 20px; z-index: 10; text-decoration: none;">
+                            {% if user.is_authenticated and product.favorite_set.all|length > 0 %}
+                                 ❤️
+                            {% else %}
+                                 🤍
+                            {% endif %}
+                        </a>
+
+                        <!-- БЕЙДЖИК -->
                         <div class="product-badge badge-{{ product.type_sale }}">
                             {{ product.get_type_sale_display }}
+                        </div>
                     </div>
-                </a>
+
+                    <div class="product-info">
+                        <h3 class="product-title">{{ product.title }}</h3>
+                        <p class="product-color">Цвет: {{ product.get_color_display }}</p>
+                        <p class="product-size">Размер: {{ product.size.name }}</p>
+                        <p class="product-price">{{ product.price }} ₸</p>
+                        <a href="{% url 'add_to_cart' product.id %}">
+                            <button class="add-to-cart">Добавить в корзину</button>
+                        </a>
+                    </div>
                 </div>
-                 <div class="product-info">
-            <h3 class="product-title">{{ product.title }}</h3>
-            <p class="product-color">Цвет: {{ product.get_color_display }}</p>
-            <p class="product-size">Размер: {{ product.size.name }}</p>
-            <p class="product-price">{{ product.price }} ₸</p>
-            <button class="add-to-cart">Добавить в корзину</button>
-        </div>
-    </div>
+
     {% endfor %}
             </div>
 

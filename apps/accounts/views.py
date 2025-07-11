@@ -95,6 +95,32 @@ def check_auth_code(request):
         
     return render(request, 'verify-code.html')
 
+@login_required
+def edit_profile(request):
+    user = request.user
+    profile, created = Profile.objects.get_or_create(customer=user)
+
+    if request.method == 'POST':
+        user.first_name = request.POST.get('first_name', '').strip()
+        user.last_name = request.POST.get('last_name', '').strip()
+        user.save()
+
+        profile.birth_date = request.POST.get('birth_date') or None
+        profile.gender = request.POST.get('gender') or None
+        profile.country = request.POST.get('country', '').strip()
+        profile.phone_number = request.POST.get('phone_number', '').strip()
+
+        if 'image' in request.FILES:
+            profile.image = request.FILES['image']
+
+        profile.save()
+
+        return redirect('profile')
+
+    return render(request, 'edit_profile.html', {'user': user, 'profile': profile})
+
+
+
 @login_required       
 def logout_view(request):
     logout(request)
@@ -105,7 +131,7 @@ def logout_view(request):
 @login_required
 def profile(request):
     user = request.user
-    profile = Profile.objects.get_or_create(customer=user)
+    profile, created = Profile.objects.get_or_create(customer=user)
 
     if request.method == 'POST':
         # Здесь можно добавить логику для обновления профиля

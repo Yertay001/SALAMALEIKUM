@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<h2>Избранные товары</h2>
+<div class="product-grid">
+  {% for fav in favorites %}
+    <div class="product-card">
+      <img src="{{ fav.product.mane_image.url }}" alt="{{ fav.product.name }}">
+      <h3>{{ fav.product.name }}</h3>
+      <p>{{ fav.product.price }} ₸</p>
+      <a href="{% url 'favorites:toggle_favorite' fav.product.id %}">Удалить из избранного</a>
+    </div>
+  {% empty %}
+    <p>Вы пока не добавили товары в избранное.</p>
+  {% endfor %}
+</div>
+{% endblock %}
