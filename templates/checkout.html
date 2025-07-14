@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  .main-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 3rem 1rem;
+    font-family: 'Inter', sans-serif;
+    background-color: #fff;
+    color: #000;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .checkout-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+  }
+
+  .form-section {
+    flex: 2;
+    min-width: 280px;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-group label {
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+    color: #333;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    font-size: 0.95rem;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #fafafa;
+    transition: border 0.2s ease;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: #5B3FE2;
+    background: #fff;
+  }
+
+  .summary-section {
+    flex: 1;
+    min-width: 240px;
+  }
+
+  .summary-box {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 2rem 1.5rem;
+    background: #fdfdfd;
+  }
+
+  .summary-box p {
+    margin: 0 0 0.75rem 0;
+  }
+
+  .checkout-btn {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: #000;
+    color: white;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s ease;
+  }
+
+  .checkout-btn:hover {
+    background: #222;
+  }
+
+  @media (max-width: 768px) {
+    .checkout-grid {
+      flex-direction: column;
+    }
+
+    .summary-box {
+      margin-top: 2rem;
+    }
+  }
+</style>
+
+<div class="main-container">
+  <h1 class="page-title">Оформление заказа</h1>
+
+  <form method="post" action="{% url 'checkout_view' %}">
+    {% csrf_token %}
+    <div class="checkout-grid">
+      <!-- Левая колонка -->
+      <div class="form-section">
+        <div class="form-group">
+          <label for="city">Город</label>
+          <input type="text" id="city" name="city" required>
+        </div>
+
+        <div class="form-group">
+          <label for="district">Район</label>
+          <input type="text" id="district" name="district" required>
+        </div>
+
+        <div class="form-group">
+          <label for="adress_line_1">Адрес (строка 1)</label>
+          <input type="text" id="adress_line_1" name="adress_line_1" required>
+        </div>
+
+        <div class="form-group">
+          <label for="adress_line_2">Адрес (строка 2)</label>
+          <input type="text" id="adress_line_2" name="adress_line_2">
+        </div>
+
+        <div class="form-group">
+          <label for="post_code">Индекс</label>
+          <input type="text" id="post_code" name="post_code" required>
+        </div>
+
+        <div class="form-group">
+          <label for="date_delivery">Дата доставки</label>
+          <input type="date" id="date_delivery" name="date_delivery" required>
+        </div>
+      </div>
+
+      <!-- Правая колонка -->
+      <div class="summary-section">
+        <div class="summary-box">
+          <p style="font-weight: 500;">ИТОГО</p>
+          <p style="font-size: 1.2rem;">₸ {{ cart.total_price|floatformat:0 }}</p>
+          <p style="font-size: 0.75rem; color: #777;">* Включая НДС</p>
+          <button type="submit" class="checkout-btn">ОФОРМИТЬ ЗАКАЗ</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}
