@@ -1,10 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from datetime import datetime
+
+from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.conf import settings
 
 from .models import Order, OrderItem, Cart, CartItem
 from apps.products.models import Product
-from apps.accounts.models import Address
+from apps.accounts.models import Address, Profile
 
 def cart_context(request):
     if request.user.is_authenticated:
@@ -100,6 +106,74 @@ def decrease_amount(request, item_id):
     return redirect('cart_view')
 
 
+def checkout_view(request):
+    if request.method == 'POST':
+        user = request.user
+        cart = get_object_or_404(Cart, customer=user)
+
+        profile, created = Profile.objects.get_or_create(customer=user)
+
+        address = Address.objects.create(
+            profile=profile,
+            city=request.POST.get('city'),
+            district=request.POST.get('district'),
+            adress_line_1= request.POST.get('adress_line_1'),
+            adress_line_2= request.POST.get('adress_line_2'),
+            post_code = request.POST.get('post_code', '')
+        )
+
+        try:
+            date_delivery = datetime.strptime(request.POST.get('date_delivery'), '%Y-%m-%d').date()
+        except ValueError:
+            messages.error(request, "Invalid date format. Please use YYYY-MM-DD.")
+            return redirect('checkout_view')
+
+
+        order = Order.objects.create(
+            address=address,
+            cart=cart,
+            date_delivery=date_delivery,
+            final_price=cart.total_price,
+            final_amount=cart.total_amount
+        )
+
+        
+        # ✉️ HTML-письмо
+        subject = f'Ваш заказ №{order.id} принят'
+        from_email = settings.EMAIL_HOST_USER
+        to_email = [user.email]
+
+        text_content = f'Спасибо за ваш заказ №{order.id}.'
+        html_content = render_to_string('email/order_confirmation_email.html', {
+            'user': user,
+            'order': order,
+        })
+
+        email = EmailMultiAlternatives(subject, text_content, from_email, to_email)
+        email.attach_alternative(html_content, "text/html")
+        email.send()
+
+
+        for item in cart.cart_cartitem.all():
+            OrderItem.objects.create(
+                order=order,
+                product=item.product,
+                amount=item.amount,
+                total_price=item.total_price
+            )
+
+        cart.cart_cartitem.all().delete()
+        cart.total_amount = 0
+        cart.total_price = 0
+        cart.save()
+        return redirect('order_success', order_id=order.id)
+    return render(request, 'checkout.html', {'cart': cart_context(request).get('cart')})
+
+
+@login_required
+def order_success(request, order_id):
+    order = get_object_or_404(Order, id=order_id, cart__customer=request.user)
+    return render(request, 'order_success.html', {'order': order})
 
 
 

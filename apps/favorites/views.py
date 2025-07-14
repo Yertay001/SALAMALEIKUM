@@ -16,3 +16,5 @@ def toggle_favorite(request, product_id):
 def favorites_list(request):
     favorites = Favorite.objects.filter(user=request.user).select_related('product')
     return render(request, 'favorites_list.html', {'favorites': favorites})
+
+

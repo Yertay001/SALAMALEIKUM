@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; color: #333; padding: 20px; }
+    .email-box { background: white; padding: 30px; border-radius: 8px; max-width: 600px; margin: auto; }
+    h2 { color: #222; }
+    p { font-size: 14px; line-height: 1.5; margin-bottom: 10px; }
+    .footer { font-size: 12px; color: #888; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div class="email-box">
+    <h2>Здравствуйте, {{ user.first_name|default:"Клиент" }}!</h2>
+    <p>Спасибо за ваш заказ в нашем магазине.</p>
+    <p><strong>Номер заказа:</strong> {{ order.id }}</p>
+    <p><strong>Дата доставки:</strong> {{ order.date_delivery }}</p>
+    <p><strong>Сумма:</strong> ₸ {{ order.final_price|floatformat:2 }}</p>
+    <p><strong>Количество товаров:</strong> {{ order.final_amount }}</p>
+    <p class="footer">Если у вас есть вопросы, просто ответьте на это письмо.</p>
+  </div>
+</body>
+</html>
+
